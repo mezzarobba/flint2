@@ -19,6 +19,15 @@ int main()
     slong count_success = 0, count_unable = 0, count_domain = 0;
     flint_rand_t state;
 
+    int status = GR_SUCCESS;
+    gr_ctx_t ctx;
+    slong i, n;
+    fmpz_mpoly_ctx_t mctx;
+    fmpz_mpoly_t f, g, h;
+    gr_ptr x;
+    gr_ptr fx, gx, hx, y;
+    slong sz;
+
     flint_printf("fmpz_mpoly_evaluate....");
     fflush(stdout);
 
@@ -26,15 +35,6 @@ int main()
 
     for (iter = 0; iter < 10000; iter++)
     {
-        int status = GR_SUCCESS;
-        gr_ctx_t ctx;
-        slong i, n;
-        fmpz_mpoly_ctx_t mctx;
-        fmpz_mpoly_t f, g, h;
-        gr_ptr x;
-        gr_ptr fx, gx, hx, y;
-        slong sz;
-
         gr_ctx_init_random(ctx, state);
         sz = ctx->sizeof_elem;
 
