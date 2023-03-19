@@ -16,6 +16,12 @@ int main()
     slong iter;
     flint_rand_t state;
 
+    ca_ctx_t ctx;
+    ca_mat_t A, B, P, Q, C, D;
+    ca_t d, t;
+    slong n;
+    int success;
+
     flint_printf("exp...");
     fflush(stdout);
 
@@ -23,12 +29,6 @@ int main()
 
     for (iter = 0; iter < 1000 * 0.1 * flint_test_multiplier(); iter++)
     {
-        ca_ctx_t ctx;
-        ca_mat_t A, B, P, Q, C, D;
-        ca_t d, t;
-        slong n;
-        int success;
-
         ca_ctx_init(ctx);
         n = n_randint(state, 3);
 
