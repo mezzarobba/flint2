@@ -32,7 +32,7 @@ ca_mat_check_equal(const ca_mat_t A, const ca_mat_t B, ca_ctx_t ctx)
     {
         for (j = 0; j < ca_mat_ncols(A); j++)
         {
-            flint_printf("i = " WORD_FMT "d, j = " WORD_FMT "\n");
+            flint_printf("i = " WORD_FMT "d, j = " WORD_FMT "\n", i, j);
             fflush(stdout);
 
             eq = ca_check_equal(ca_mat_entry(A, i, j), ca_mat_entry(B, i, j), ctx);
