@@ -23,6 +23,10 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
     flint_printf("in small check\n");
     fflush(stdout);
 
+    flint_printf("inputs:\n");
+    ca_print(x, ctx); flint_printf("\n");
+    ca_print(y, ctx); flint_printf("\n");
+
     if (CA_IS_QQ(x, ctx) && CA_IS_QQ(y, ctx))
     {
         return fmpq_equal(CA_FMPQ(x), CA_FMPQ(y)) ? T_TRUE : T_FALSE;
