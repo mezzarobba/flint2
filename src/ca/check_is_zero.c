@@ -120,7 +120,13 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
     {
         flint_printf("no factoring 4 %wd\n", prec); fflush(stdout);
 
+        ca_print(x, ctx); flint_printf("\n"); fflush(stdout);
+
         ca_get_acb_raw(v, x, prec, ctx);
+
+        acb_print(v); flint_printf("\n"); fflush(stdout);
+
+        flint_printf("contains zero\n"); fflush(stdout);
 
         if (!acb_contains_zero(v))
         {
@@ -135,6 +141,8 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
             res = _ca_check_is_zero_qqbar(x, ctx);
         }
     }
+
+    flint_printf("to clear\n"); fflush(stdout);
 
     acb_clear(v);
 
