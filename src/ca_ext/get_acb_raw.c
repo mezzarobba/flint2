@@ -61,8 +61,11 @@ ca_ext_get_acb_raw(acb_t res, ca_ext_t x, slong prec, ca_ctx_t ctx)
 {
     if (CA_EXT_HEAD(x) == CA_QQBar)
     {
+        flint_printf("ca_ext_get_acb_raw: %wd  ", prec); qqbar_print(CA_EXT_QQBAR(x)); flint_printf("\n"); fflush(stdout);
         qqbar_cache_enclosure(CA_EXT_QQBAR(x), prec);
+        flint_printf("cached enclosure\n");
         qqbar_get_acb(res, CA_EXT_QQBAR(x), prec);
+        flint_printf("got acb\n");
         return;
     }
 
