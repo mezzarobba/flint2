@@ -154,9 +154,15 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
     flint_printf("d6\n");
     fflush(stdout);
 
+        ca_print(x, ctx); printf("\n");
+        ca_print(y, ctx); printf("\n");
+
         /* check_is_zero may have additional heuristics */
         ca_init(t, ctx);
         ca_sub(t, x, y, ctx);
+
+        ca_print(t, ctx); printf("\n");
+
         res = ca_check_is_zero(t, ctx);
         ca_clear(t, ctx);
     }

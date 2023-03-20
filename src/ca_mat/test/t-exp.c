@@ -11,6 +11,103 @@
 
 #include "ca_mat.h"
 
+/*
+
+iter = 49
+n = 2
+rand
+1
+success
+s1
+in small check
+not QQ
+not special
+not repr
+not algebraic number field
+d1
+d2
+d3
+d4
+d5
+d6
+d7
+s2
+s3
+first mul
+second mul
+inside ca_mat_check_equal
+i = 0, j = 
+in small check
+not QQ
+not special
+after small check
+i = 0, j = 
+in small check
+not QQ
+not special
+after small check
+i = 1, j = 
+in small check
+after small check
+i = 1, j = 
+in small check
+not QQ
+not special
+after small check
+after success
+in small check
+not QQ
+not special
+not repr
+not algebraic number field
+d1
+d2
+d3
+d4
+d5
+d7
+in small check
+not QQ
+not special
+not repr
+not algebraic number field
+d1
+d2
+d3
+d4
+d5
+d7
+true
+inside ca_mat_check_equal
+i = 0, j = 
+in small check
+not QQ
+not special
+not repr
+not algebraic number field
+d1
+d2
+d3
+d4
+d5
+d6
+d7
+after small check
+i = 0, j = 
+in small check
+not QQ
+not special
+not repr
+not algebraic number field
+d1
+d2
+d3
+d4
+d5
+d6
+
+*/
+
 int main()
 {
     slong iter;
@@ -29,6 +126,11 @@ int main()
 
     for (iter = 0; iter < 1000 * 0.1 * flint_test_multiplier(); iter++)
     {
+        if (iter == 49)
+        {
+            flint_printf("\n\n\n\n\n\n==========================================================================================\n\n\n\n\n\n\n");
+        }
+
         flint_printf("iter = %d\n", iter);
         fflush(stdout);
 
@@ -175,6 +277,9 @@ int main()
         ca_clear(t, ctx);
 
         ca_ctx_clear(ctx);
+
+        if (iter == 49)
+            break;
     }
 
     flint_randclear(state);

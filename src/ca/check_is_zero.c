@@ -85,10 +85,14 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
     truth_t res;
     slong prec, prec_limit;
 
+    flint_printf("no factoring 1\n");
+
     res = ca_is_zero_check_fast(x, ctx);
 
     if (res != T_UNKNOWN || CA_IS_SPECIAL(x))
         return res;
+
+    flint_printf("no factoring 2\n");
 
     /* The denominator is irrelevant. */
     /* Todo: we should probably also factor out monomials. */
@@ -97,6 +101,9 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
         ca_t t;
         ca_init(t, ctx);
         ca_set(t, x, ctx);
+
+        flint_printf("no factoring 3\n");
+
         /* Todo: could also remove content */
         fmpz_mpoly_one(fmpz_mpoly_q_denref(CA_MPOLY_Q(t)), CA_FIELD_MCTX(CA_FIELD(t, ctx), ctx));
         res = ca_check_is_zero_no_factoring(t, ctx);
@@ -111,6 +118,8 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
 
     for (prec = 64; (prec <= prec_limit) && (res == T_UNKNOWN); prec *= 2)
     {
+        flint_printf("no factoring 4 %wd\n", prec);
+
         ca_get_acb_raw(v, x, prec, ctx);
 
         if (!acb_contains_zero(v))
@@ -129,12 +138,24 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
 
     acb_clear(v);
 
+    flint_printf("no factoring 5\n");
+
     if (res == T_UNKNOWN)
     {
         ca_t tmp;
         ca_init(tmp, ctx);
+
+        flint_printf("no factoring 6\n");
+
+        ca_print(x, ctx); flint_printf("\n");
+
         ca_rewrite_complex_normal_form(tmp, x, 1, ctx);
+
+        ca_print(tmp, ctx); flint_printf("\n");
+
         res = ca_is_zero_check_fast(tmp, ctx);
+
+        flint_printf("no factoring 7\n");
 
         if (ctx->options[CA_OPT_VERBOSE])
         {
@@ -147,6 +168,8 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
         ca_clear(tmp, ctx);
     }
 
+    flint_printf("no factoring 8\n");
+
     return res;
 }
 
@@ -155,7 +178,11 @@ ca_check_is_zero(const ca_t x, ca_ctx_t ctx)
 {
     truth_t res;
 
+    flint_printf("check zero 1\n");
+
     res = ca_check_is_zero_no_factoring(x, ctx);
+
+    flint_printf("check zero 2\n");
 
     if (res == T_UNKNOWN && !CA_IS_SPECIAL(x))
     {
@@ -164,17 +191,25 @@ ca_check_is_zero(const ca_t x, ca_ctx_t ctx)
         truth_t factor_res;
         slong i, nontrivial_factors;
 
+        flint_printf("check zero 3\n");
+
         /* the zero test will surely have succeeded over a number field */
         if (!CA_FIELD_IS_GENERIC(CA_FIELD(x, ctx)))
             flint_abort();
+
+        flint_printf("check zero 4\n");
 
         /* extract numerator */
         ca_init(t, ctx);
         ca_set(t, x, ctx);
         fmpz_mpoly_one(fmpz_mpoly_q_denref(CA_MPOLY_Q(t)), CA_FIELD_MCTX(CA_FIELD(t, ctx), ctx));
 
+        flint_printf("check zero 5\n");
+
         ca_factor_init(fac, ctx);
         ca_factor(fac, t, CA_FACTOR_ZZ_NONE | CA_FACTOR_POLY_FULL, ctx);
+
+        flint_printf("check zero 6\n");
 
         nontrivial_factors = 0;
         for (i = 0; i < fac->length; i++)
@@ -184,7 +219,11 @@ ca_check_is_zero(const ca_t x, ca_ctx_t ctx)
         {
             for (i = 0; i < fac->length; i++)
             {
+                flint_printf("check zero 7 %wd %wd\n", i, fac->length);
+
                 factor_res = ca_check_is_zero_no_factoring(fac->base + i, ctx);
+
+                flint_printf("check zero 8 %wd %wd\n", i, fac->length);
 
                 if (factor_res == T_TRUE)
                 {
@@ -201,6 +240,8 @@ ca_check_is_zero(const ca_t x, ca_ctx_t ctx)
                 }
             }
         }
+
+        flint_printf("check zero 9\n");
 
         ca_clear(t, ctx);
         ca_factor_clear(fac, ctx);
