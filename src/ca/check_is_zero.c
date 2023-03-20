@@ -122,6 +122,8 @@ ca_check_is_zero_no_factoring(const ca_t x, ca_ctx_t ctx)
 
         ca_print(x, ctx); flint_printf("\n"); fflush(stdout);
 
+        flint_printf("get raw\n"); fflush(stdout);
+
         ca_get_acb_raw(v, x, prec, ctx);
 
         acb_print(v); flint_printf("\n"); fflush(stdout);

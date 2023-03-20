@@ -75,6 +75,8 @@ ca_get_acb_raw(acb_t res, const ca_t x, slong prec, ca_ctx_t ctx)
         acb_ptr v;
         slong i, n;
 
+        flint_printf("get_acb_raw: multivariate\n"); fflush(stdout);
+
         n = CA_FIELD_LENGTH(xfield);
 
         if (n == 1)
@@ -87,9 +89,18 @@ ca_get_acb_raw(acb_t res, const ca_t x, slong prec, ca_ctx_t ctx)
             v = _acb_vec_init(n);
 
             for (i = 0; i < n; i++)
+            {
+                flint_printf("get ext %wd / %wd\n", i, n); fflush(stdout);
+                ca_ext_print(CA_FIELD_EXT_ELEM(xfield, i), ctx); flint_printf("\n"); fflush(stdout);
                 ca_ext_get_acb_raw(v + i, CA_FIELD_EXT_ELEM(xfield, i), prec, ctx);
+                acb_print(v + i); flint_printf("\n"); fflush(stdout);
+            }
+
+            flint_printf("evaluate\n"); fflush(stdout);
 
             fmpz_mpoly_q_evaluate_acb(res, CA_MPOLY_Q(x), v, prec, CA_FIELD_MCTX(xfield, ctx));
+
+            flint_printf("evaluated\n"); fflush(stdout);
 
             _acb_vec_clear(v, n);
         }
