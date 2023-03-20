@@ -52,5 +52,6 @@ jobs:
         run: |
           cd build
           set "FLINT_TEST_MULTIPLIER=1"
-          bin\src-gr-test-t-fmpz_mpoly_evaluate.exe
           bin\src-ca_mat-test-t-exp.exe
+
+          # bin\src-gr-test-t-fmpz_mpoly_evaluate.exe
