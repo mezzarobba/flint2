@@ -29,13 +29,13 @@ int main()
 
     for (iter = 0; iter < 1000 * 0.1 * flint_test_multiplier(); iter++)
     {
-        flint_printf("iter = %d", iter);
+        flint_printf("iter = %d\n", iter);
         fflush(stdout);
 
         ca_ctx_init(ctx);
         n = n_randint(state, 3);
 
-        flint_printf("init", iter);
+        flint_printf("init\n", iter);
         fflush(stdout);
 
         ca_mat_init(A, n, n, ctx);
@@ -47,7 +47,7 @@ int main()
         ca_init(d, ctx);
         ca_init(t, ctx);
 
-        flint_printf("rand", iter);
+        flint_printf("rand\n", iter);
         fflush(stdout);
 
         if (n <= 2 && n_randint(state, 5) == 0)
@@ -57,14 +57,14 @@ int main()
 
         if (n_randint(state, 2))
         {
-            flint_printf("1", iter);
+            flint_printf("1\n", iter);
             fflush(stdout);
 
             success = ca_mat_exp(B, A, ctx);
         }
         else
         {
-            flint_printf("0", iter);
+            flint_printf("0\n", iter);
             fflush(stdout);
 
             ca_mat_set(B, A, ctx);
@@ -73,7 +73,7 @@ int main()
 
         if (success)
         {
-            flint_printf("success", iter);
+            flint_printf("success\n", iter);
             fflush(stdout);
 
             ca_mat_det(d, B, ctx);
@@ -81,7 +81,7 @@ int main()
             ca_mat_trace(t, A, ctx);
             ca_exp(t, t, ctx);
 
-            flint_printf("s1", iter);
+            flint_printf("s1\n", iter);
             fflush(stdout);
 
             if (ca_check_equal(d, t, ctx) == T_FALSE)
@@ -98,14 +98,14 @@ int main()
                 ca_mat_randtest_rational(P, state, 1, ctx);
             } while (ca_mat_inv(Q, P, ctx) != T_TRUE);
 
-            flint_printf("s2", iter);
+            flint_printf("s2\n", iter);
             fflush(stdout);
 
             ca_mat_mul(C, P, A, ctx);
             ca_mat_mul(C, C, Q, ctx);
             success = ca_mat_exp(C, C, ctx);
 
-            flint_printf("s3", iter);
+            flint_printf("s3\n", iter);
             fflush(stdout);
 
             if (success)
@@ -127,20 +127,23 @@ int main()
             }
         }
 
-        flint_printf("after success", iter);
+        flint_printf("after success\n", iter);
         fflush(stdout);
 
         if (ca_mat_log(B, A, ctx) == T_TRUE)
         {
             success = ca_mat_exp(C, B, ctx);
 
-            flint_printf("true", iter);
+            flint_printf("true\n", iter);
             fflush(stdout);
 
             if (success)
             {
                 if (ca_mat_check_equal(A, C, ctx) == T_FALSE)
                 {
+                    flint_printf("going to fail\n", iter);
+                    fflush(stdout);
+
                     flint_printf("FAIL (logarithm)\n");
                     flint_printf("A: "); ca_mat_print(A, ctx); flint_printf("\n");
                     flint_printf("B: "); ca_mat_print(B, ctx); flint_printf("\n");
@@ -150,7 +153,7 @@ int main()
             }
         }
 
-        flint_printf("clear", iter);
+        flint_printf("clear\n", iter);
         fflush(stdout);
 
         ca_mat_clear(A, ctx);
@@ -159,7 +162,7 @@ int main()
         ca_mat_clear(Q, ctx);
         ca_mat_clear(C, ctx);
         ca_mat_clear(D, ctx);
-        flint_printf("mid clear", iter);
+        flint_printf("mid clear\n", iter);
         fflush(stdout);
 
         ca_clear(d, ctx);
