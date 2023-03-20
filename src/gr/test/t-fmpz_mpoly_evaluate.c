@@ -35,18 +35,30 @@ int main()
 
     for (iter = 0; iter < 10000; iter++)
     {
+        flint_printf("iter = %wd\n");
+        fflush(stdout);
+
         gr_ctx_init_random(ctx, state);
         sz = ctx->sizeof_elem;
 
         n = 1 + n_randint(state, 5);
         fmpz_mpoly_ctx_init(mctx, n, ORD_LEX);
 
+        flint_printf("init\n");
+        fflush(stdout);
+
         fmpz_mpoly_init(f, mctx);
         fmpz_mpoly_init(g, mctx);
         fmpz_mpoly_init(h, mctx);
 
+        flint_printf("INIT\n");
+        fflush(stdout);
+
         GR_TMP_INIT_VEC(x, n, ctx);
         GR_TMP_INIT4(fx, gx, hx, y, ctx);
+
+        flint_printf("randtest\n");
+        fflush(stdout);
 
         status |= _gr_vec_randtest(x, state, n, ctx);
 
@@ -54,9 +66,16 @@ int main()
         fmpz_mpoly_randtest_bound(g, state, 1 + n_randint(state, 30), 10, 1 + n_randint(state, 6), mctx);
         fmpz_mpoly_add(h, f, g, mctx);
 
+        flint_printf("before evaluate\n");
+        fflush(stdout);
+
         status |= gr_fmpz_mpoly_evaluate(fx, f, x, mctx, ctx);
         status |= gr_fmpz_mpoly_evaluate(gx, g, x, mctx, ctx);
         status |= gr_fmpz_mpoly_evaluate(hx, h, x, mctx, ctx);
+
+        flint_printf("after evaluate\n");
+        fflush(stdout);
+
         status |= gr_add(y, fx, gx, ctx);
 
         if (status == GR_SUCCESS && gr_equal(y, hx, ctx) == T_FALSE)
@@ -80,16 +99,28 @@ int main()
         count_domain += ((status & GR_DOMAIN) != 0);
         count_unable += ((status & GR_UNABLE) != 0);
 
+        flint_printf("before clear\n");
+        fflush(stdout);
+
         fmpz_mpoly_clear(f, mctx);
         fmpz_mpoly_clear(g, mctx);
         fmpz_mpoly_clear(h, mctx);
         fmpz_mpoly_ctx_clear(mctx);
 
+        flint_printf("mid clear\n");
+        fflush(stdout);
+
         GR_TMP_CLEAR_VEC(x, n, ctx);
         GR_TMP_CLEAR4(fx, gx, hx, y, ctx);
 
+        flint_printf("before ctx clear\n");
+        fflush(stdout);
+
         gr_ctx_clear(ctx);
     }
+
+    flint_printf("cleanup\n");
+    fflush(stdout);
 
     flint_randclear(state);
     flint_cleanup();
