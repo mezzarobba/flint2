@@ -20,10 +20,16 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
     truth_t x_alg, y_alg;
     slong prec;
 
+    flint_printf("in small check\n");
+    fflush(stdout);
+
     if (CA_IS_QQ(x, ctx) && CA_IS_QQ(y, ctx))
     {
         return fmpq_equal(CA_FMPQ(x), CA_FMPQ(y)) ? T_TRUE : T_FALSE;
     }
+
+    flint_printf("not QQ\n");
+    fflush(stdout);
 
     if (CA_IS_SPECIAL(x) || CA_IS_SPECIAL(y))
     {
@@ -49,25 +55,43 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
             return T_FALSE;
     }
 
+    flint_printf("not special\n");
+    fflush(stdout);
+
     if (ca_equal_repr(x, y, ctx))
         return T_TRUE;
+
+    flint_printf("not repr\n");
+    fflush(stdout);
 
     /* same algebraic number field ==> sufficient to compare representation */
     if (x->field == y->field && CA_FIELD_IS_NF(CA_FIELD(x, ctx)))
         return T_FALSE;
+
+    flint_printf("not algebraic number field\n");
+    fflush(stdout);
 
     /* Rational number field elements *should* have been demoted to QQ
        automatically, but let's do a comparison as a precaution. */
     if (CA_FIELD_IS_NF(CA_FIELD(x, ctx)) && CA_IS_QQ(y, ctx))
         return nf_elem_equal_fmpq(CA_NF_ELEM(x), CA_FMPQ(y), CA_FIELD_NF(CA_FIELD(x, ctx))) ? T_TRUE : T_FALSE;
 
+    flint_printf("d1\n");
+    fflush(stdout);
+
     if (CA_FIELD_IS_NF(CA_FIELD(y, ctx)) && CA_IS_QQ(x, ctx))
         return nf_elem_equal_fmpq(CA_NF_ELEM(y), CA_FMPQ(x), CA_FIELD_NF(CA_FIELD(y, ctx))) ? T_TRUE : T_FALSE;
+
+    flint_printf("d2\n");
+    fflush(stdout);
 
     res = T_UNKNOWN;
 
     acb_init(u);
     acb_init(v);
+
+    flint_printf("d3\n");
+    fflush(stdout);
 
     /* for (prec = 64; (prec <= ctx->options[CA_OPT_PREC_LIMIT]) && (res == T_UNKNOWN); prec *= 2) */
     prec = 64;
@@ -82,8 +106,14 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
         }
     }
 
+    flint_printf("d4\n");
+    fflush(stdout);
+
     acb_clear(u);
     acb_clear(v);
+
+    flint_printf("d5\n");
+    fflush(stdout);
 
     x_alg = ca_check_is_algebraic(x, ctx);
     y_alg = ca_check_is_algebraic(y, ctx);
@@ -121,12 +151,18 @@ ca_check_equal(const ca_t x, const ca_t y, ca_ctx_t ctx)
 
     if (res == T_UNKNOWN)
     {
+    flint_printf("d6\n");
+    fflush(stdout);
+
         /* check_is_zero may have additional heuristics */
         ca_init(t, ctx);
         ca_sub(t, x, y, ctx);
         res = ca_check_is_zero(t, ctx);
         ca_clear(t, ctx);
     }
+
+    flint_printf("d7\n");
+    fflush(stdout);
 
     return res;
 }

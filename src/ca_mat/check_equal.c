@@ -17,6 +17,9 @@ ca_mat_check_equal(const ca_mat_t A, const ca_mat_t B, ca_ctx_t ctx)
     slong i, j;
     truth_t res, eq;
 
+    flint_printf("inside ca_mat_check_equal\n");
+    fflush(stdout);
+
     if ((ca_mat_nrows(A) != ca_mat_nrows(B)) ||
         (ca_mat_ncols(A) != ca_mat_ncols(B)))
     {
@@ -29,7 +32,13 @@ ca_mat_check_equal(const ca_mat_t A, const ca_mat_t B, ca_ctx_t ctx)
     {
         for (j = 0; j < ca_mat_ncols(A); j++)
         {
+            flint_printf("i = " WORD_FMT "d, j = " WORD_FMT "\n");
+            fflush(stdout);
+
             eq = ca_check_equal(ca_mat_entry(A, i, j), ca_mat_entry(B, i, j), ctx);
+
+            flint_printf("after small check\n");
+            fflush(stdout);
 
             if (eq == T_FALSE)
                 return T_FALSE;
