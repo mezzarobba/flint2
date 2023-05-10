@@ -27,9 +27,7 @@ typedef struct fmpz_mod_ctx
     nmod_t mod;
     ulong n_limbs[3];
     ulong ninv_limbs[3];
-#ifdef FLINT_HAVE_FFT_SMALL
     fmpz_preinvn_struct * ninv_huge;
-#endif
 }
 fmpz_mod_ctx_struct;
 
