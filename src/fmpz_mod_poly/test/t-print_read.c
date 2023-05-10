@@ -40,6 +40,8 @@ int main(void)
 
     fmpz_mod_ctx_init_ui(ctx, 2);
 
+    flint_printf("S1 %p\n", ctx->ninv_huge);
+
     flint_printf("print/ read....");
     fflush(stdout);
 
@@ -48,10 +50,18 @@ int main(void)
         fmpz_mod_poly_t *a;
 
         a = flint_malloc(n * sizeof(fmpz_mod_poly_t));
+
+        flint_printf("S2 %p\n", ctx->ninv_huge);
+
         for (i = 0; i < n; i++)
         {
             fmpz_mod_poly_init(a[i], ctx);
+
+            flint_printf("S3 %wd %p\n", i, ctx->ninv_huge);
+
             fmpz_mod_poly_randtest(a[i], state, n_randint(state, 100), ctx);
+
+            flint_printf("S4 %wd %p\n", i, ctx->ninv_huge);
         }
 
         if (pipe(fd))
@@ -86,6 +96,8 @@ int main(void)
 
             for (j = 0; j < n; j++)
             {
+                flint_printf("S4 %wd %p\n", j, ctx->ninv_huge);
+
                 r = fmpz_mod_poly_fprint(out, a[j], ctx);
                 if ((j < n - 1) && (r > 0))
                     r = flint_fprintf(out, "\n");
@@ -100,7 +112,11 @@ int main(void)
             }
 
             for (j = 0; j < n; j++)
+            {
                 fmpz_mod_poly_clear(a[j], ctx);
+                flint_printf("S5 %wd %p\n", j, ctx->ninv_huge);
+            }
+
             flint_free(a);
             fclose(out);
             return 0;
@@ -122,12 +138,18 @@ int main(void)
             }
 
             fmpz_mod_ctx_init_ui(newctx, 3);
+
+            flint_printf("S6 %p %p\n", ctx->ninv_huge, newctx->ninv_huge);
+
             fmpz_mod_poly_init(t, newctx);
 
             i = 0;
             while (!feof(in))
             {
                 r = fmpz_mod_poly_fread(in, t, newctx);
+
+                flint_printf("S7 %wd %p %p\n", i, ctx->ninv_huge, newctx->ninv_huge);
+
                 if (r <= 0)
                 {
                     flint_printf("FAIL:\n");
@@ -139,6 +161,9 @@ int main(void)
                 result = fmpz_equal(fmpz_mod_ctx_modulus(ctx),
                                     fmpz_mod_ctx_modulus(newctx));
                 result = result && fmpz_mod_poly_equal(t, a[i], newctx);
+
+                flint_printf("S8 %wd %p %p\n", i, ctx->ninv_huge, newctx->ninv_huge);
+
                 if (!result)
                 {
                     flint_printf("FAIL:\n");
@@ -168,6 +193,8 @@ int main(void)
             fmpz_mod_poly_clear(a[i], ctx);
         flint_free(a);
     }
+
+    flint_printf("S9 %p\n", ctx->ninv_huge);
 
     /* Write bad data to a pipe and read it */
     {
@@ -231,12 +258,17 @@ int main(void)
 
             fmpz_mod_poly_init(t, ctx);
 
+            flint_printf("S10 %p %p\n", ctx->ninv_huge, newctx->ninv_huge);
+
             i = 0;
             /* Only four junk bytes are sent and our read
                doesn't consume invalid bytes, so eof is never reached */
             for(i = 0; i < 500; i++)
             {
                 r = fmpz_mod_poly_fread(in, t, newctx);
+
+                flint_printf("S11 %wd, %p %p\n", i, ctx->ninv_huge, newctx->ninv_huge);
+
                 if (r > 0)
                 {
                     flint_printf("FAIL:\n");
@@ -246,11 +278,15 @@ int main(void)
                 }
             }
 
+            flint_printf("S13 %p\n", newctx->ninv_huge);
+
             fmpz_mod_poly_clear(t, newctx);
             fmpz_mod_ctx_clear(newctx);
             fclose(in);
         }
     }
+
+    flint_printf("S12 %p\n", ctx->ninv_huge);
 
     fmpz_mod_ctx_clear(ctx);
     FLINT_TEST_CLEANUP(state);
