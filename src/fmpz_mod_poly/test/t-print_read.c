@@ -258,6 +258,8 @@ int main(void)
 
             fmpz_mod_poly_init(t, ctx);
 
+            fmpz_mod_ctx_init_ui(newctx, 3);
+
             flint_printf("S10 %p %p\n", ctx->ninv_huge, newctx->ninv_huge);
 
             i = 0;
