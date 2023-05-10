@@ -112,6 +112,7 @@ HEADLESS_DIRS := generic_files
 
 HEADER_DIRS :=                                                              \
         thread_pool                     thread_support                      \
+        fmpz_mod_poly                                                       \
                                                                             \
         ulong_extras                                                        \
         long_extras                                                         \
@@ -122,7 +123,7 @@ HEADER_DIRS :=                                                              \
         mpfr_vec                        mpfr_mat                            \
         nmod            nmod_vec        nmod_mat        nmod_poly           \
         fmpz            fmpz_vec        fmpz_mat        fmpz_poly           \
-        fmpz_mod        fmpz_mod_vec    fmpz_mod_mat    fmpz_mod_poly       \
+        fmpz_mod        fmpz_mod_vec    fmpz_mod_mat                        \
         fmpq            fmpq_vec        fmpq_mat        fmpq_poly           \
                                                                             \
         fq              fq_vec          fq_mat          fq_poly             \
