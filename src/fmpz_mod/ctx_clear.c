@@ -14,15 +14,13 @@
 
 void fmpz_mod_ctx_clear(fmpz_mod_ctx_t ctx)
 {
-#ifdef FLINT_HAVE_FFT_SMALL
-    flint_printf("CTX %p\n", ctx->ninv_huge);
-
     if (ctx->ninv_huge != NULL)
     {
+        flint_printf("CTX %p\n", ctx->ninv_huge);
+
         fmpz_preinvn_clear(ctx->ninv_huge);
         flint_free(ctx->ninv_huge);
     }
-#endif
 
     fmpz_clear(ctx->n);
 }
