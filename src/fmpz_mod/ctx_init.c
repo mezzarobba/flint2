@@ -31,7 +31,9 @@ void fmpz_mod_ctx_init(fmpz_mod_ctx_t ctx, const fmpz_t n)
     ctx->add_fxn = _fmpz_mod_addN;
     ctx->sub_fxn = _fmpz_mod_subN;
     ctx->mul_fxn = _fmpz_mod_mulN;
+#ifdef FLINT_HAVE_FFT_SMALL
     ctx->ninv_huge = NULL;
+#endif
 
     bits = fmpz_bits(n);
     if (bits <= FLINT_BITS)

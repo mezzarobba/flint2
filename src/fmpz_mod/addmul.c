@@ -23,9 +23,13 @@ void fmpz_mod_addmul(
     fmpz_init(t);
     fmpz_mul(t, c, d);
     fmpz_add(t, t, b);
+#ifdef FLINT_HAVE_FFT_SMALL
     if (ctx->ninv_huge == NULL)
         fmpz_mod(a, t, ctx->n);
     else
         fmpz_fdiv_r_preinvn(a, t, ctx->n, ctx->ninv_huge);
+#else
+    fmpz_mod(a, t, ctx->n);
+#endif
     fmpz_clear(t);
 }
