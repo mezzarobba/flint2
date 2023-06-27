@@ -19,7 +19,11 @@ void * flint_aligned_alloc(ulong alignment, ulong size)
 
     FLINT_ASSERT(size % alignment == 0);
 
+#if defined(__MINGW64__)
+    p = _aligned_malloc(alignment, size);
+#else
     p = aligned_alloc(alignment, size);
+#endif
 
     if (p == NULL)
         flint_throw(FLINT_ERROR, "Unable to allocate %wu bytes with alignment %wu in %s\n", size, alignment, __FUNCTION__);
@@ -29,7 +33,11 @@ void * flint_aligned_alloc(ulong alignment, ulong size)
 
 void flint_aligned_free(void * p)
 {
+#if defined(__MINGW64__)
+    _aligned_free(p);
+#else
     free(p);
+#endif
 }
 
 void sd_fft_ctx_clear(sd_fft_ctx_t Q)
