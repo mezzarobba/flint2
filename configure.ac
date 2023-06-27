@@ -236,15 +236,15 @@ esac],
 enable_gmp_internals="yes")
 
 AC_ARG_ENABLE(avx2,
-[AS_HELP_STRING([--enable-avx2],[Enable AVX2 instructions [default=no]])],
+[AS_HELP_STRING([--enable-avx2],[Enable AVX2 instructions [default=auto]])],
 [case $enableval in
-yes|no)
+yes|no|auto)
     ;;
 *)
-    AC_MSG_ERROR([Bad value $enableval for --enable-avx2. Need yes or no.])
+    AC_MSG_ERROR([Bad value $enableval for --enable-avx2. Need yes, no or auto.])
     ;;
 esac],
-enable_avx2="no")
+enable_avx2="auto")
 
 AC_ARG_ENABLE(avx512,
 [AS_HELP_STRING([--enable-avx512],[Enable AVX512 instructions [default=no]])],
@@ -883,6 +883,14 @@ then
     [AC_MSG_ERROR([$CC does not support the ABI flag -m$ABI])])
 fi
 AC_SUBST(ABI_FLAG)
+
+if test "$enable_avx2" = "auto";
+then
+    AX_CHECK_COMPILE_FLAG([-mfma], [save_CFLAGS="-mfma $save_CFLAGS"])
+    AX_CHECK_COMPILE_FLAG([-mavx2],
+    [save_CFLAGS="-mavx2 $save_CFLAGS"
+     AC_DEFINE(FLINT_HAVE_AVX2,1,[Define if system has AVX2])])
+fi
 
 if test "$enable_avx2" = "yes";
 then
