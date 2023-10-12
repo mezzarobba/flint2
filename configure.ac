@@ -222,7 +222,7 @@ yes|no)
     AC_MSG_ERROR([Bad value $enableval for --enable-gmp-internals. Need yes or no.])
     ;;
 esac],
-enable_gmp_internals="yes")
+enable_gmp_internals="no")
 
 AC_ARG_ENABLE(avx2,
 [AS_HELP_STRING([--enable-avx2],[Enable AVX2 instructions [default=no]])],
